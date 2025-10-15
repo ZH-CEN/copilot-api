@@ -8,11 +8,15 @@ import { messageRoutes } from "./routes/messages/route"
 import { modelRoutes } from "./routes/models/route"
 import { tokenRoute } from "./routes/token/route"
 import { usageRoute } from "./routes/usage/route"
+import { inboundAuth } from "./middleware/inbound-auth"
 
 export const server = new Hono()
 
 server.use(logger())
 server.use(cors())
+
+// Inbound API key authentication (no-op unless env keys are set)
+server.use("*", inboundAuth())
 
 server.get("/", (c) => c.text("Server running"))
 
